@@ -27,7 +27,7 @@ exports.handleUserSignin = async (req, res) => {
     const userInDb = await User.findOne({ email });
 
     if (!userInDb) {
-        return res.status(401).json({ error: `user with email ${email} not found!` })
+        return res.render('login', { error: 'Invalid Email' })
     }
 
     const salt = userInDb.salt;
@@ -36,11 +36,11 @@ exports.handleUserSignin = async (req, res) => {
     const hashedPassword = crypto.createHmac('sha256', salt).update(password).digest('hex');
 
     if (hashedPassword !== passwordInDb)
-        return res.json({ message: `Incorrect email or password!` })
+        return res.render('login', { error: 'Invalid Password' })
 
 
     const token = generateToken({ _id: userInDb._id, blah: 'stuff' })
 
-    return res.json({ status: 'success', data: { token } })
+    return res.cookie('token', token).redirect('/')
 
 }

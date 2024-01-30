@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/css.ejs') %>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blogify</title>
+  </head>
+  <body>
+    <div class="container mt-2">
+      <h1>Welcome to Blogify App</h1>
+      <ul>
+        <% blogs.forEach(blog => { %>
+        <li>
+          <a href="/blog/<%= blog._id %>"> <%= blog.title %> </a>
+          <% if (userId == blog.createdBy) { %>
+          <button
+            onclick="deleteBlog('<%= blog._id %>')"
+            class="btn btn-danger ml-2 btn-sm"
+          >
+            Delete
+          </button>
+          <% } %>
+        </li>
+        <% }) %>
+      </ul>
+      <a href="/new">Post your own blog</a>
+    </div>
+    <script>
+      async function deleteBlog(blogId) {
+        await fetch(`/blog/${blogId}`, {
+          method: "DELETE",
+        });
+        window.location.reload();
+      }
+    </script>
+  </body>
+</html>

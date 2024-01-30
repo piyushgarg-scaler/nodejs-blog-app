@@ -1,20 +1,15 @@
 const { validateToken } = require('../lib/auth')
 
 exports.checkForAuthentication = (req, res, next) => {
-    const authroizationHeader = req.headers['Authorization'] || req.headers['authorization']
 
+    const token = req.cookies['token'];
 
-    if (!authroizationHeader) {
+    if (!token) {
         req.user = null;
         return next();
     }
 
-    const token = authroizationHeader.split('Bearer ')[1];
-
-
     const userPayload = validateToken(token);
-
-
 
     req.user = userPayload
 

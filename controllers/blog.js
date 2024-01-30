@@ -8,7 +8,7 @@ exports.handleGetAllBlogs = async (req, res) => {
 exports.handleGetBlogById = async (req, res) => {
     const id = req.params.id;
     const blog = await Blog.findById(id)
-    return res.json({ data: blog })
+    return res.render('blog', { blog })
 }
 
 exports.handleCreateBlog = async (req, res) => {
@@ -17,7 +17,7 @@ exports.handleCreateBlog = async (req, res) => {
 
     const blog = await Blog.create({ title, body, createdBy: userId })
 
-    return res.json({ status: 'success', data: { id: blog._id } })
+    return res.redirect(`/blog/${blog.id}`)
 
 }
 
